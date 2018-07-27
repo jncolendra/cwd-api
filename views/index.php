@@ -30,7 +30,7 @@
 	  		<div class="row" ng-if="note_active">
 	  			<h4>Notes <button class="btn waves-effect waves-light btn-small" ng-click="add_note()">Add Note</button></h4>
 	  			<hr>
-				<div class="col s12 m6" ng-repeat="(key,value) in notes">
+				<div class="col s12 m6" ng-repeat="(key,value) in notes | orderBy:'-id'">
 		      		<div class="card grey lighten-4">
 			        	<div class="card-content" ng-click="edit_note = key">
 
@@ -166,12 +166,14 @@
       					$http.post("/api/notes/add",data);
       				}
 	      			$scope.update_note = function(key){
+	      				$scope.notes.reverse();
 	      				$scope.notes[key].title = angular.element(document.querySelector('#title_'+key)).val();
 	      				$scope.notes[key].text = angular.element(document.querySelector('#textarea_'+key)).val();
 	      				
 	      				$http.post("/api/notes/update",$scope.notes[key]);
 	      			}
 	      			$scope.delete_note = function(key){
+	      				$scope.notes.reverse();
 	      				$http.post("/api/notes/delete",$scope.notes[key]);
 
 	      				$scope.notes.splice(key,1);
